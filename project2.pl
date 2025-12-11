@@ -55,22 +55,59 @@ if action is variable
     % valid_maze
 
     valid_maze(Maze) :-
-        
+        Maze = [FirstRow | _],
+        FirstRow \= [],
+        maplist(check_row_lengths(FirstRow), Maze),
+        count_cells(Maze, s, NumS),
+        NumS =:= 1,
+        count_cells(Maze, e, NumE),
+        NumE >= 1,
+        all_cells_valid(Maze).
 
     % check_row_lengths
 
+    check_row_lengths(Template, Row) :-
+        length(Template, L),
+        length(Row, L).
+
     % count_cells
+
+    count_cells([], _, 0).
+    count_cells([Row | Rest], CellType, Count) :-
+        row_count(Row, CellType, RowCount),
+        count_cells(Rest, CellType, RestCount),
+        Count is RowCount + RestCount.
 
     % row_count
 
+    row_count([], _, 0).
+    row_count([Cell | Rest], CellType, Count) :-
+        row_count(Rest, CellType, RestCount),
+        (   Cell == CellType
+        ->  Count is RestCount + 1
+        ;   Count is RestCount
+        ).
+
     % all_cells_valid
 
+    all_cells_valid([]).
+    all_cells_valid([Row | Rest]) :-
+        all_cells_valid_row(Row),
+        all_cells_valid(Rest).
+
     % all_cells_valid_row
+
+    all_cells_valid_row([]).
+    all_cells_valid_row([Cell | Rest]) :-
+        member(Cell, [f, w, s, e]),
+        all_cells_valid_row(Rest).
 
 % maze helpers
 
     % cell_at
+
     % in_bounds
+
     % start_pos
 
 % action given, follow actions
@@ -80,6 +117,7 @@ if action is variable
 % simulate given list of actions
 
     % simulate_actions []
+
     % simulate_actions [Act | Rest]
 
 % search for path to exit
