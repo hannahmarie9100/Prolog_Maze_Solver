@@ -171,7 +171,8 @@ if action is variable
         NewPos = (NewR, NewC),
         in_bounds(Maze, NewPos),
         \+ member(NewPos, Visited),
-        cell(Maze, NewPos, NewCell), y6t fdcxzfdswezzzzzzzz       NewCell \= w,
+        cell(Maze, NewPos, NewCell),      
+        NewCell \= w,
         exit_path(Maze, NewPos, [Act | ACC], [NewPos | Visited], Path).
 
 
