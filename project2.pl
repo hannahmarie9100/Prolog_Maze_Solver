@@ -102,13 +102,28 @@ if action is variable
         member(Cell, [f, w, s, e]),
         all_cells_valid_row(Rest).
 
-% maze helpers
+% cell_at
 
-    % cell_at
+    cell_at(Maze, (R, C), Cell) :-
+        nth0(R, Maze, Row),
+        nth0(C, Row, Cell).
 
     % in_bounds
 
+    in_bounds(Maze, (R, C)) :-
+        R >= 0,
+        length(Maze, NumRows),
+        R < NumRows,
+        Maze = [FirstRow | _],
+        length(FirstRow, NumCols),
+        C >= 0,
+        C < NumCols.
+
     % start_pos
+
+    start_pos(Maze, (R, C)) :-
+        nth0(R, Maze, Row),
+        nth0(C, Row, s).
 
 % action given, follow actions
 
