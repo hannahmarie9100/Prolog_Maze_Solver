@@ -127,20 +127,51 @@ if action is variable
 
 % action given, follow actions
 
-    % move
+     % move
+
+    move(left, 0, -1).
+    move(right, 0, 1).
+    move(up, -1, 0).
+    move(down, 1, 0).
 
 % simulate given list of actions
 
-    % simulate_actions []
+   
+% simulate_actions []
+
+    simulate_actions(_Maze, Pos, [], Pos).
 
     % simulate_actions [Act | Rest]
+
+    simulate_actions(Maze, (R, C), [Act | Rest], EndPos) :-
+        move(Act, DR, DC),
+        NewR is R + DR,
+        NewC is C + DC,
+        NewPos = (NewR, NewC),
+        in_bounds(Maze, NewPos), % stay inside the maze
+        cell_at(Maze, NewPos, Cell),
+        Cell \= w, % cant move into a wall
+        simulate_actions(Maze, NewPos, Rest, EndPos).
 
 % search for path to exit
 
     % base case
         % exit_path (Maze, (R, C), ACC, _, ACC)
 
+        exit_path(Maze, (R, C), ACC, _Visited, ACC) :-
+            cell_at(Maze, (R, C), e).
+
     % recursive case
         % exit_path (Maze, (R, C), ACC, Visited, Path)
+
+    exit_path(Maze, (R, C), ACC, Visited, Path) :-
+        move(Act, DR, DC),  
+        NewR is R + DR,
+        NewC is C + DC,
+        NewPos = (NewR, NewC),
+        in_bounds(Maze, NewPos),
+        \+ member(NewPos, Visited),
+        cell(Maze, NewPos, NewCell), y6t fdcxzfdswezzzzzzzz       NewCell \= w,
+        exit_path(Maze, NewPos, [Act | ACC], [NewPos | Visited], Path).
 
 
